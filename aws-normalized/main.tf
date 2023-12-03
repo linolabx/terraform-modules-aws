@@ -35,6 +35,6 @@ EOF
 
 output "iam_policy" {
   value = {
-    iam_self_manage_service_specific_credentials = data.aws_partition.this == "aws-cn" ? aws_iam_policy.iam_self_manage_service_specific_credentials.arn : "arn:${data.aws_partition.this.partition}:iam::aws:policy/IAMSelfManageServiceSpecificCredentials"
+    iam_self_manage_service_specific_credentials = data.aws_partition.this == "aws-cn" ? aws_iam_policy.iam_self_manage_service_specific_credentials.0.arn : "arn:${data.aws_partition.this.partition}:iam::aws:policy/IAMSelfManageServiceSpecificCredentials"
   }
 }
