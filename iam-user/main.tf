@@ -14,6 +14,7 @@ variable "name" {
 
 variable "groups" {
   type        = list(string)
+  default     = []
   description = "groups to attach to user"
 }
 
@@ -28,6 +29,29 @@ variable "create_login_profile" {
   description = "create login profile for user"
   default     = false
 }
+
+variable "roles" {
+  type        = list(string)
+  default     = []
+  description = "roles that user can assume"
+}
+
+variable "external_roles" {
+  type = list(object({
+    account_id = string
+    role_name  = string
+  }))
+  default     = []
+  description = "external roles that user can assume, used for assume role from another account"
+}
+
+data "aws_partition" "this" {}
+data "aws_caller_identity" "this" {}
+
+locals { role_arns = concat(
+  [for role in var.roles : "arn:${data.aws_partition.this.partition}:iam::${data.aws_caller_identity.this.account_id}:role/${role}"],
+  [for ext in var.external_roles : "arn:${data.aws_partition.this.partition}:iam::${ext.account_id}:role/${ext.role_name}"]
+) }
 
 resource "aws_iam_user" "this" { name = var.name }
 
@@ -45,6 +69,20 @@ resource "aws_iam_user_login_profile" "this" {
 resource "aws_iam_access_key" "this" {
   count = var.create_access_key ? 1 : 0
   user  = aws_iam_user.this.name
+}
+
+resource "aws_iam_user_policy" "this" {
+  count = length(local.role_arns) > 0 ? 1 : 0
+
+  user = aws_iam_user.this.name
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [{
+      Action   = "sts:AssumeRole",
+      Effect   = "Allow",
+      Resource = local.role_arns
+    }]
+  })
 }
 
 output "name" { value = aws_iam_user.this.name }

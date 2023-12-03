@@ -39,6 +39,9 @@ No modules.
 | [aws_iam_user.this](https://registry.terraform.io/providers/hashicorp/aws/5.29.0/docs/resources/iam_user) | resource |
 | [aws_iam_user_group_membership.this](https://registry.terraform.io/providers/hashicorp/aws/5.29.0/docs/resources/iam_user_group_membership) | resource |
 | [aws_iam_user_login_profile.this](https://registry.terraform.io/providers/hashicorp/aws/5.29.0/docs/resources/iam_user_login_profile) | resource |
+| [aws_iam_user_policy.this](https://registry.terraform.io/providers/hashicorp/aws/5.29.0/docs/resources/iam_user_policy) | resource |
+| [aws_caller_identity.this](https://registry.terraform.io/providers/hashicorp/aws/5.29.0/docs/data-sources/caller_identity) | data source |
+| [aws_partition.this](https://registry.terraform.io/providers/hashicorp/aws/5.29.0/docs/data-sources/partition) | data source |
 
 ## Inputs
 
@@ -46,8 +49,10 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_create_access_key"></a> [create\_access\_key](#input\_create\_access\_key) | create access key for user | `bool` | `false` | no |
 | <a name="input_create_login_profile"></a> [create\_login\_profile](#input\_create\_login\_profile) | create login profile for user | `bool` | `false` | no |
-| <a name="input_groups"></a> [groups](#input\_groups) | groups to attach to user | `list(string)` | n/a | yes |
+| <a name="input_external_roles"></a> [external\_roles](#input\_external\_roles) | external roles that user can assume, used for assume role from another account | <pre>list(object({<br>    account_id = string<br>    role_name  = string<br>  }))</pre> | `[]` | no |
+| <a name="input_groups"></a> [groups](#input\_groups) | groups to attach to user | `list(string)` | `[]` | no |
 | <a name="input_name"></a> [name](#input\_name) | username | `string` | n/a | yes |
+| <a name="input_roles"></a> [roles](#input\_roles) | roles that user can assume | `list(string)` | `[]` | no |
 
 ## Outputs
 
