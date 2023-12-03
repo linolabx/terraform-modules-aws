@@ -29,13 +29,11 @@ variable "mfa" {
   default     = false
 }
 
-resource "random_pet" "this" {}
-locals { role_name = "${var.name_prefix}${var.mfa ? "-MFA" : ""}-${random_pet.this.id}" }
-
 data "aws_partition" "this" {}
 
+resource "random_pet" "this" {}
 resource "aws_iam_role" "this" {
-  name = local.role_name
+  name = "${var.name_prefix}${var.mfa ? "-MFA" : ""}-${random_pet.this.id}"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -55,5 +53,5 @@ resource "aws_iam_role_policy_attachment" "this" {
   role       = aws_iam_role.this.name
 }
 
-output "role_name" { value = local.role_name }
+output "role_name" { value = aws_iam_role.this.name }
 output "role_arn" { value = aws_iam_role.this.arn }
