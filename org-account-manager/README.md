@@ -6,7 +6,7 @@ you can create users in this account and let them assume role in other accounts
 
 ```terraform
 module "acc_manager" {
-  source = "github.com/managerx/terraform-modules-aws//org-account-manager"
+  source = "github.com/linolabx/terraform-modules-aws//org-account-manager"
 
   providers = { aws = aws.root }
 
