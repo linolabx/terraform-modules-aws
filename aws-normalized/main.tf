@@ -33,6 +33,8 @@ resource "aws_iam_policy" "iam_self_manage_service_specific_credentials" {
 EOF
 }
 
-output "iam_self_manage_service_specific_credentials" {
-  value = data.aws_partition.this == "aws-cn" ? aws_iam_policy.iam_self_manage_service_specific_credentials.arn : "arn:${data.aws_partition.this.partition}:iam::aws:policy/IAMSelfManageServiceSpecificCredentials"
+output "iam_policy" {
+  value = {
+    iam_self_manage_service_specific_credentials = data.aws_partition.this == "aws-cn" ? aws_iam_policy.iam_self_manage_service_specific_credentials.arn : "arn:${data.aws_partition.this.partition}:iam::aws:policy/IAMSelfManageServiceSpecificCredentials"
+  }
 }
